@@ -32,6 +32,7 @@ function Book() {
       console.log("database error");
     }
   }
+
   async function findAuthorBooks(author, order) {
     const authorSQL = `SELECT * FROM books WHERE author= $1`;
     const bookByOrderSql = `SELECT * FROM books WHERE author= $1 ORDER BY publicationdate DESC `;
