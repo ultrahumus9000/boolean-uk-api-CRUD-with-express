@@ -6,4 +6,4 @@ const connection = process.env.linlinURL;
 
 const db = new Client(connection);
 
-module.export = db;
+module.exports = db;
