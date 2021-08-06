@@ -8,7 +8,7 @@ function Book() {
       let result = await db.query(typeSQL, [type]);
       return result.rows;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
@@ -21,15 +21,19 @@ function Book() {
       }
       return result.rows;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
   async function findAuthorBooks(author) {
     const authorSQL = `SELECT * FROM books WHERE author LIKE $1`;
 
-    let result = await db.query(authorSQL, [`%${author}%`]);
-    return result.rows;
+    try {
+      let result = await db.query(authorSQL, [`%${author}%`]);
+      return result.rows;
+    } catch (error) {
+      throw error;
+    }
   }
 
   async function findAuthorBooksByOrder(author, order) {
@@ -39,7 +43,7 @@ function Book() {
       let result = await db.query(bookByOrderSql, [`%${author}%`]);
       return result.rows;
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 

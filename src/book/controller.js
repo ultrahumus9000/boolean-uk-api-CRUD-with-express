@@ -22,7 +22,7 @@ function getTypeBooks(req, res) {
   if (aTopic === undefined) {
     findTypeOfBooks(bookType)
       .then((books) => {
-        if (!books) {
+        if (books.length === 0) {
           throw "no such type of books avaliable";
         } else {
           res.json(books);
@@ -30,33 +30,22 @@ function getTypeBooks(req, res) {
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).json("no such type of books avaliable");
+        res.status(500).json(error);
       });
   } else {
     findTypeBooksWithTopics(bookType, aTopic)
       .then((books) => {
-        if (!books) {
-          throw error;
+        if (books.length === 0) {
+          throw "no such topic";
         } else {
           res.json(books);
         }
       })
       .catch((error) => {
         console.error(error);
+        res.status(500).json(error);
       });
   }
-
-  findTypeOfBooks(bookType, aTopic)
-    .then((books) => {
-      if (!books) {
-        res.json("no books avaliable");
-      } else {
-        res.json(books);
-      }
-    })
-    .catch((error) => {
-      throw error;
-    });
 }
 
 function getAuthorBooks(req, res) {
@@ -67,22 +56,28 @@ function getAuthorBooks(req, res) {
     findAuthorBooksByOrder(author, orderDate)
       .then((result) => {
         if (!result || result.length === 0) {
-          res.json("no such author");
+          throw "no such author";
         } else {
           res.json(result);
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+      });
   } else {
     findAuthorBooks(author)
       .then((result) => {
         if (!result || result.length === 0) {
-          res.json("no such author");
+          throw "no such author";
         } else {
           res.json(result);
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json(error);
+      });
   }
 }
 
