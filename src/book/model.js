@@ -4,29 +4,17 @@ function Book() {
   async function findTypeOfBooks(type, topic) {
     const typeSQL = `SELECT * FROM books WHERE type = $1`;
     const topicSQL = `SELECT * FROM books WHERE type = $1 AND topic = $2`;
+
     try {
-      if (type === "fiction") {
-        if (topic === undefined) {
-          let result = await db.query(typeSQL, [`Fiction`]);
-          return result.rows;
-        } else {
-          let result = await db.query(topicSQL, [`Fiction`, topic]);
-          if (result.rows.length === 1) {
-            return result.rows[0];
-          }
-          return result.rows;
+      if (topic === undefined) {
+        let result = await db.query(typeSQL, [type]);
+        return result.rows;
+      } else {
+        let result = await db.query(topicSQL, [type, topic]);
+        if (result.rows.length === 1) {
+          return result.rows[0];
         }
-      } else if (type === "non-fiction") {
-        if (topic === undefined) {
-          let result = await db.query(typeSQL, [`Non-Fiction`]);
-          return result.rows;
-        } else {
-          let result = await db.query(topicSQL, [`Non-Fiction`, topic]);
-          if (result.rows.length === 1) {
-            return result.rows[0];
-          }
-          return result.rows;
-        }
+        return result.rows;
       }
     } catch (error) {
       console.log("database error");

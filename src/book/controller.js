@@ -5,6 +5,15 @@ const { findTypeOfBooks, findAuthorBooks } = book();
 function getTypeBooks(req, res) {
   let bookType = req.params.id;
   let aTopic = req.query.topic;
+  bookType = bookType.charAt(0).toUpperCase() + bookType.slice(1);
+
+  if (bookType === "Non-fiction") {
+    bookType =
+      bookType.slice(0, 4) +
+      bookType.charAt(4).toUpperCase() +
+      bookType.slice(5);
+  }
+
   findTypeOfBooks(bookType, aTopic)
     .then((books) => {
       if (!books) {
