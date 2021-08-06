@@ -7,7 +7,7 @@ function Book() {
       let result = await db.query(typeSQL, [type]);
       return result.rows;
     } catch (error) {
-      throw error;
+      throw ["error from sql", error];
     }
   }
 
