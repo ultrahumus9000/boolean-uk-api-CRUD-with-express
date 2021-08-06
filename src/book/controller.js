@@ -1,6 +1,11 @@
 const book = require("./model");
 
-const { findTypeOfBooks, findAuthorBooks } = book();
+const {
+  findTypeOfBooks,
+  findAuthorBooks,
+  findTypeBooksWithTopics,
+  findAuthorBooksByOrder,
+} = book();
 
 function getTypeBooks(req, res) {
   let bookType = req.params.id;
@@ -14,6 +19,30 @@ function getTypeBooks(req, res) {
       bookType.slice(5);
   }
 
+  if (aTopic === undefined) {
+    findTypeOfBooks(bookType)
+      .then((books) => {
+        if (!books) {
+          throw "no such type of books avaliable";
+        } else {
+          res.json(books);
+        }
+      })
+      .catch(console.error);
+  } else {
+    findTypeBooksWithTopics(bookType, aTopic)
+      .then((books) => {
+        if (!books) {
+          throw error;
+        } else {
+          res.json(books);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   findTypeOfBooks(bookType, aTopic)
     .then((books) => {
       if (!books) {
@@ -22,7 +51,9 @@ function getTypeBooks(req, res) {
         res.json(books);
       }
     })
-    .catch((error) => res.status(500).json("datebase error"));
+    .catch((error) => {
+      throw error;
+    });
 }
 
 function getAuthorBooks(req, res) {

@@ -3,38 +3,46 @@ const db = require("../database/database");
 function Book() {
   async function findTypeOfBooks(type, topic) {
     const typeSQL = `SELECT * FROM books WHERE type = $1`;
-    const topicSQL = `SELECT * FROM books WHERE type = $1 AND topic = $2`;
 
     try {
-      if (topic === undefined) {
-        let result = await db.query(typeSQL, [type]);
-        return result.rows;
-      } else {
-        let result = await db.query(topicSQL, [type, topic]);
-        if (result.rows.length === 1) {
-          return result.rows[0];
-        }
-        return result.rows;
-      }
+      let result = await db.query(typeSQL, [type]);
+      return result.rows;
     } catch (error) {
-      console.log("database error");
+      throw error;
     }
   }
 
-  async function findAuthorBooks(author, order) {
-    const authorSQL = `SELECT * FROM books WHERE author LIKE $1`;
-    const bookByOrderSql = `SELECT * FROM books WHERE author LIKE $1 ORDER BY publicationdate DESC `;
-
-    if (order) {
-      let result = await db.query(bookByOrderSql, [`%${author}%`]);
+  async function findTypeBooksWithTopics(type, topic) {
+    const topicSQL = `SELECT * FROM books WHERE type = $1 AND topic = $2`;
+    try {
+      let result = await db.query(topicSQL, [type, topic]);
+      if (result.rows.length === 1) {
+        return result.rows[0];
+      }
       return result.rows;
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  async function findAuthorBooks(author) {
+    const authorSQL = `SELECT * FROM books WHERE author LIKE $1`;
+
     let result = await db.query(authorSQL, [`%${author}%`]);
     return result.rows;
   }
+
+  async function findAuthorBooksByOrder(author, order) {
+    const bookByOrderSql = `SELECT * FROM books WHERE author LIKE $1 ORDER BY publicationdate DESC `;
+    let result = await db.query(bookByOrderSql, [`%${author}%`]);
+    return result.rows;
+  }
+
   return {
     findTypeOfBooks,
     findAuthorBooks,
+    findTypeBooksWithTopics,
+    findAuthorBooksByOrder,
   };
 }
 
