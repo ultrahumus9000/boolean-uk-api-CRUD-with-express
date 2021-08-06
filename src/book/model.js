@@ -34,14 +34,14 @@ function Book() {
   }
 
   async function findAuthorBooks(author, order) {
-    const authorSQL = `SELECT * FROM books WHERE author= $1`;
-    const bookByOrderSql = `SELECT * FROM books WHERE author= $1 ORDER BY publicationdate DESC `;
+    const authorSQL = `SELECT * FROM books WHERE author LIKE $1`;
+    const bookByOrderSql = `SELECT * FROM books WHERE author LIKE $1 ORDER BY publicationdate DESC `;
 
     if (order) {
-      let result = await db.query(bookByOrderSql, [author]);
+      let result = await db.query(bookByOrderSql, [`%${author}%`]);
       return result.rows;
     }
-    let result = await db.query(authorSQL, [author]);
+    let result = await db.query(authorSQL, [`%${author}%`]);
     return result.rows;
   }
   return {
