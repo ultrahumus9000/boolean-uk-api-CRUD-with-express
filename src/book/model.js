@@ -36,7 +36,7 @@ function Book() {
     }
   }
 
-  async function findAuthorBooksByOrder(author, order) {
+  async function findAuthorBooksByOrder(author) {
     const bookByOrderSql = `SELECT * FROM books WHERE author LIKE $1 ORDER BY publicationdate DESC `;
 
     try {

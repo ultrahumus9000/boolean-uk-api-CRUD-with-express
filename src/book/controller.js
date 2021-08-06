@@ -53,7 +53,7 @@ function getAuthorBooks(req, res) {
   let orderDate = req.query.order;
 
   if (orderDate) {
-    findAuthorBooksByOrder(author, orderDate)
+    findAuthorBooksByOrder(author)
       .then((result) => {
         if (!result || result.length === 0) {
           throw "no such author";
