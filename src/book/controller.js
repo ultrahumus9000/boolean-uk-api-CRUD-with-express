@@ -28,7 +28,10 @@ function getTypeBooks(req, res) {
           res.json(books);
         }
       })
-      .catch(console.error);
+      .catch((error) => {
+        console.error(error);
+        res.status(500).json("no such type of books avaliable");
+      });
   } else {
     findTypeBooksWithTopics(bookType, aTopic)
       .then((books) => {
@@ -60,13 +63,27 @@ function getAuthorBooks(req, res) {
   let author = req.params.id;
   let orderDate = req.query.order;
 
-  findAuthorBooks(author, orderDate).then((result) => {
-    if (!result || result.length === 0) {
-      res.json("no such author");
-    } else {
-      res.json(result);
-    }
-  });
+  if (orderDate) {
+    findAuthorBooksByOrder(author, orderDate)
+      .then((result) => {
+        if (!result || result.length === 0) {
+          res.json("no such author");
+        } else {
+          res.json(result);
+        }
+      })
+      .catch(console.error);
+  } else {
+    findAuthorBooks(author)
+      .then((result) => {
+        if (!result || result.length === 0) {
+          res.json("no such author");
+        } else {
+          res.json(result);
+        }
+      })
+      .catch(console.error);
+  }
 }
 
 module.exports = { getTypeBooks, getAuthorBooks };
