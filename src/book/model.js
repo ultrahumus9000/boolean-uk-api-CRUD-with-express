@@ -3,7 +3,6 @@ const db = require("../database/database");
 function Book() {
   async function findTypeOfBooks(type, topic) {
     const typeSQL = `SELECT * FROM books WHERE type = $1`;
-
     try {
       let result = await db.query(typeSQL, [type]);
       return result.rows;
